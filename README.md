@@ -295,7 +295,26 @@ DB_PASSWORD=your_mysql_password
 
 ---
 
-### 🔑 Step 4 — Generate the application key
+### 🔑 Step 4 — Install Laravel Sanctum
+
+Laravel Sanctum provides API token authentication. Install and configure it:
+
+```bash
+# Install Sanctum
+composer require laravel/sanctum
+
+# Publish Sanctum's migration files
+php artisan vendor:publish --provider="Laravel\\Sanctum\\SanctumServiceProvider"
+
+# Run Sanctum migrations (creates personal_access_tokens table)
+php artisan migrate
+```
+
+> 📝 **Note:** Sanctum creates the `personal_access_tokens` table that stores API tokens. This is essential for the login system to work properly.
+
+---
+
+### 🔐 Step 5 — Generate the application key
 
 ```bash
 php artisan key:generate
@@ -305,7 +324,7 @@ php artisan key:generate
 
 ---
 
-### 🗄️ Step 5 — Create the database
+### 🗄️ Step 6 — Create the database
 
 In MySQL, run:
 
@@ -315,7 +334,7 @@ CREATE DATABASE finance_backend;
 
 ---
 
-### 🔄 Step 6 — Run migrations and seed data
+### 🔄 Step 7 — Run migrations and seed data
 
 ```bash
 php artisan migrate:fresh --seed
@@ -325,7 +344,7 @@ This creates all tables, seeds 4 users across all roles, and generates 40 realis
 
 ---
 
-### 🌐 Step 7 — Start the server
+### 🌐 Step 8 — Start the server
 
 ```bash
 php artisan serve
@@ -335,7 +354,7 @@ The API is now live at `http://localhost:8000`.
 
 ---
 
-### 🧪 Step 8 — Run the tests
+### 🧪 Step 9 — Run the tests
 
 ```bash
 # Run everything
@@ -351,12 +370,46 @@ php artisan test --filter=AccessControlTest
 
 | Role                | Email                 | Password |
 | ------------------- | --------------------- | -------- |
-| 🛡️ Admin            | admin@finance.test    | password |
-| 📊 Analyst          | analyst@finance.test  | password |
-| 👁️ Viewer           | viewer@finance.test   | password |
-| ⏸️ Inactive Analyst | inactive@finance.test | password |
+| 🛡️ Admin            | admin@finance.test    | passadmin |
+| 📊 Analyst          | analyst@finance.test  | passanalyst |
+| 👁️ Viewer           | viewer@finance.test   | passviewer |
+| ⏸️ Inactive Analyst | inactive@finance.test | passinactive |
 
 > 💡 **Testing Tip:** The inactive account exists specifically to prove that a deactivated user with a valid token still gets a `403`. Try it — it should fail, and that failure is the point.
+
+---
+
+### 🛠️ Troubleshooting Sanctum Setup
+
+If you encounter authentication issues, check these common problems:
+
+#### **Missing personal_access_tokens table**
+
+```bash
+# Error: "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'personal_access_tokens' doesn't exist"
+# Solution: Publish and run Sanctum migrations
+php artisan vendor:publish --provider="Laravel\\Sanctum\\SanctumServiceProvider"
+php artisan migrate
+```
+
+#### **500 error during login**
+
+```bash
+# Error: "Call to undefined method Illuminate\\Database\\Eloquent\\Relations\\HasMany::delete()"
+# Solution: This happens when Sanctum migrations aren't run
+php artisan migrate
+```
+
+#### **Token not working**
+
+```bash
+# Make sure your User model has the HasApiTokens trait
+# Check app/Models/User.php includes:
+use Laravel\\Sanctum\\HasApiTokens;
+class User extends Authenticatable {
+    use HasApiTokens, HasFactory, Notifiable;
+}
+```
 
 ---
 
