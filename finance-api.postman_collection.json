@@ -1,0 +1,523 @@
+{
+    "info": {
+        "name": "Finance Backend API",
+        "description": "Complete collection for Finance Data Processing and Access Control Backend. Use the Login requests first — tokens are auto-saved to environment variables.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        { "key": "base_url", "value": "http://localhost:8000" },
+        { "key": "admin_token", "value": "" },
+        { "key": "analyst_token", "value": "" },
+        { "key": "viewer_token", "value": "" }
+    ],
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Register",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{base_url}}/api/auth/register",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "options": { "raw": { "language": "json" } },
+                            "raw": "{\n  \"name\": \"New User\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Login as Admin",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.data && res.data.token) {",
+                                    "  pm.environment.set('admin_token', res.data.token);",
+                                    "  console.log('Admin token saved.');",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "url": "{{base_url}}/api/auth/login",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "options": { "raw": { "language": "json" } },
+                            "raw": "{\n  \"email\": \"admin@finance.test\",\n  \"password\": \"passadmin\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Login as Analyst",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.data && res.data.token) {",
+                                    "  pm.environment.set('analyst_token', res.data.token);",
+                                    "  console.log('Analyst token saved.');",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "url": "{{base_url}}/api/auth/login",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "options": { "raw": { "language": "json" } },
+                            "raw": "{\n  \"email\": \"analyst@finance.test\",\n  \"password\": \"passanalyst\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Login as Viewer",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const res = pm.response.json();",
+                                    "if (res.data && res.data.token) {",
+                                    "  pm.environment.set('viewer_token', res.data.token);",
+                                    "  console.log('Viewer token saved.');",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "url": "{{base_url}}/api/auth/login",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "options": { "raw": { "language": "json" } },
+                            "raw": "{\n  \"email\": \"viewer@finance.test\",\n  \"password\": \"passviewer\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Current User (me)",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/auth/me",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{base_url}}/api/auth/logout",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Users (Admin Only)",
+            "item": [
+                {
+                    "name": "List Users",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/users",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "users"],
+                            "query": [
+                                {
+                                    "key": "role",
+                                    "value": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "per_page",
+                                    "value": "15",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Create User",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{base_url}}/api/users",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "options": { "raw": { "language": "json" } },
+                            "raw": "{\n  \"name\": \"New Analyst\",\n  \"email\": \"newanalyst@finance.test\",\n  \"password\": \"password\",\n  \"password_confirmation\": \"password\",\n  \"role\": \"analyst\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Get User by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/users/2",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Update User Status",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{base_url}}/api/users/3/status",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "options": { "raw": { "language": "json" } },
+                            "raw": "{\n  \"status\": \"inactive\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Update User Role",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{base_url}}/api/users/3/role",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "options": { "raw": { "language": "json" } },
+                            "raw": "{\n  \"role\": \"analyst\"\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Financial Records",
+            "item": [
+                {
+                    "name": "List Records (all filters)",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/records",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "records"],
+                            "query": [
+                                {
+                                    "key": "type",
+                                    "value": "income",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "category",
+                                    "value": "salary",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "date_from",
+                                    "value": "2024-01-01",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "date_to",
+                                    "value": "2024-12-31",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "search",
+                                    "value": "rent",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "per_page",
+                                    "value": "10",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Get Single Record",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/records/1",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{viewer_token}}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Create Record (Admin)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{base_url}}/api/records",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "options": { "raw": { "language": "json" } },
+                            "raw": "{\n  \"amount\": 75000.00,\n  \"type\": \"income\",\n  \"category\": \"salary\",\n  \"date\": \"2024-11-01\",\n  \"notes\": \"November salary payment\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Create Record (Analyst)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{base_url}}/api/records",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{analyst_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "options": { "raw": { "language": "json" } },
+                            "raw": "{\n  \"amount\": 2500.00,\n  \"type\": \"expense\",\n  \"category\": \"utilities\",\n  \"date\": \"2024-11-05\",\n  \"notes\": \"Monthly electricity bill\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Create Record (Viewer — expect 403)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{base_url}}/api/records",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{viewer_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "options": { "raw": { "language": "json" } },
+                            "raw": "{\n  \"amount\": 500,\n  \"type\": \"expense\",\n  \"category\": \"food\",\n  \"date\": \"2024-11-10\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Update Record",
+                    "request": {
+                        "method": "PUT",
+                        "url": "{{base_url}}/api/records/1",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "options": { "raw": { "language": "json" } },
+                            "raw": "{\n  \"amount\": 80000.00,\n  \"notes\": \"Updated with bonus\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Record (Soft)",
+                    "request": {
+                        "method": "DELETE",
+                        "url": "{{base_url}}/api/records/1",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "List Trashed Records (Admin)",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/records/admin/trashed",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Restore Record (Admin)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{base_url}}/api/records/1/restore",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Dashboard",
+            "item": [
+                {
+                    "name": "Summary",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/dashboard/summary",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Monthly Trends (6 months)",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/dashboard/trends?months=6",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{admin_token}}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Category Breakdown",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/dashboard/categories",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{analyst_token}}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Recent Activity",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/dashboard/recent",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{analyst_token}}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Summary as Viewer (expect 403)",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{base_url}}/api/dashboard/summary",
+                        "header": [
+                            { "key": "Accept", "value": "application/json" },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{viewer_token}}"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

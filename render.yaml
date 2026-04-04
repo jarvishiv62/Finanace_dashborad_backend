@@ -1,0 +1,75 @@
+services:
+  - type: web
+    name: finance-backend
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /up
+
+    envVars:
+      - key: APP_NAME
+        value: "Finance Backend"
+
+      - key: APP_ENV
+        value: production
+
+      - key: APP_DEBUG
+        value: false
+
+      # Render will auto-generate a secure random value
+      - key: APP_KEY
+        generateValue: true
+
+      - key: APP_URL
+        # Replace with your actual Render URL after first deploy
+        value: https://finance-backend.onrender.com
+
+      - key: LOG_CHANNEL
+        value: stderr
+
+      - key: DB_CONNECTION
+        value: mysql
+
+      # These four pull connection info directly from the linked database
+      - key: DB_HOST
+        fromDatabase:
+          name: finance-db
+          property: host
+
+      - key: DB_PORT
+        fromDatabase:
+          name: finance-db
+          property: port
+
+      - key: DB_DATABASE
+        fromDatabase:
+          name: finance-db
+          property: database
+
+      - key: DB_USERNAME
+        fromDatabase:
+          name: finance-db
+          property: user
+
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: finance-db
+          property: password
+
+      - key: CACHE_DRIVER
+        value: file
+
+      - key: SESSION_DRIVER
+        value: file
+
+      - key: QUEUE_CONNECTION
+        value: sync
+
+      - key: SANCTUM_STATEFUL_DOMAINS
+        value: finance-backend.onrender.com
+
+databases:
+  - name: finance-db
+    databaseName: finance_backend
+    # Free tier — note: spins down after 90 days of inactivity
+    plan: free
