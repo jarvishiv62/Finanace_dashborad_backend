@@ -30,8 +30,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'role' => RoleEnum::class,
-        'status' => StatusEnum::class,
+        // Temporarily disabled enum casting to isolate the issue
+        // 'role' => RoleEnum::class,
+        // 'status' => StatusEnum::class,
     ];
 
     // ─── Relationships ────────────────────────────────────────────────────────
