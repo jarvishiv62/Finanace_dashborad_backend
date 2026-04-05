@@ -5,6 +5,17 @@ echo "Setting up storage directories..."
 mkdir -p /var/www/html/storage/logs
 chmod -R 777 /var/www/html/storage/logs
 
+# Generate APP_KEY if not set
+if [ -z "$APP_KEY" ]; then
+    echo "Generating APP_KEY..."
+    php artisan key:generate --force
+fi
+
+# Clear caches to ensure fresh environment
+echo "Clearing caches..."
+php artisan config:clear
+php artisan cache:clear
+
 # Publish Sanctum migrations and run them
 echo "Publishing Sanctum migrations..."
 php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider" --force
