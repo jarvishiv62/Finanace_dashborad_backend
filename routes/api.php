@@ -36,9 +36,17 @@ Route::get('/debug', function () {
             'APP_KEY' => config('app.key') ? 'set' : 'missing',
             'APP_URL' => config('app.url'),
             'DB_CONNECTION' => config('database.default'),
+            'APP_ENV' => config('app.env'),
         ],
         'last_error' => error_get_last(),
         'laravel_version' => app()->version(),
+        'loaded_config_files' => [
+            'app' => file_exists(config_path('app.php')),
+            'database' => file_exists(config_path('database.php')),
+        ],
+        'current_working_directory' => getcwd(),
+        'env_file_exists' => file_exists(base_path('.env')),
+        'env_file_contents' => file_exists(base_path('.env')) ? 'exists' : 'missing',
     ]);
 });
 
