@@ -35,7 +35,7 @@ php artisan view:clear
 
 # Reload environment and verify APP_KEY
 echo "Reloading environment..."
-source .env
+export $(cat .env | xargs)
 echo "APP_KEY is now: $APP_KEY"
 
 # Regenerate config cache with new APP_KEY
