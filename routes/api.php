@@ -23,7 +23,22 @@ Route::get('/health', function () {
         'status' => 'ok',
         'timestamp' => now()->toISOString(),
         'database' => DB::connection()->getPdo() ? 'connected' : 'disconnected',
-        'environment' => app()->environment()
+        'environment' => app()->environment(),
+        'app_key' => config('app.key') ? 'set' : 'missing',
+        'sanctum_config' => config('sanctum') ? 'loaded' : 'missing'
+    ]);
+});
+
+// ── Debug Route (remove in production) ───────────────────────────────────────
+Route::get('/debug', function () {
+    return response()->json([
+        'env_vars' => [
+            'APP_KEY' => config('app.key') ? 'set' : 'missing',
+            'APP_URL' => config('app.url'),
+            'DB_CONNECTION' => config('database.default'),
+        ],
+        'last_error' => error_get_last(),
+        'laravel_version' => app()->version(),
     ]);
 });
 
