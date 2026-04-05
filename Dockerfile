@@ -58,11 +58,7 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Cache config and routes for production performance
-RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 EXPOSE 8000
 

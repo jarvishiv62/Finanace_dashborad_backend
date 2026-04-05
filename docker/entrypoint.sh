@@ -56,7 +56,7 @@ php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider" -
 
 # Run Laravel migrations
 echo "Running database migrations..."
-php artisan migrate --force
+php artisan migrate --force || true
 
 # Seed the database
 echo "Seeding database..."
