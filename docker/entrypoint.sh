@@ -9,8 +9,12 @@ if [ ! -f .env ]; then
     echo "APP_DEBUG=false" >> .env
     echo "DB_CONNECTION=sqlite" >> .env
     echo "DB_DATABASE=/var/www/html/database/database.sqlite" >> .env
-    # Set a predefined APP_KEY (static for production)
-    RANDOM_KEY=$(head /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 32)
+fi
+
+# Ensure APP_KEY exists (add if missing)
+if ! grep -q "APP_KEY=" .env; then
+    echo "Adding APP_KEY to .env..."
+    RANDOM_KEY=$(openssl rand -base64 32 | tr -d '/+=' | cut -c1-32)
     echo "APP_KEY=base64:$RANDOM_KEY" >> .env
 fi
 
