@@ -22,6 +22,10 @@ fi
 echo "Verifying .env file contents:"
 cat .env
 
+# Test Laravel can read the APP_KEY
+echo "Testing Laravel APP_KEY..."
+php artisan tinker --execute="echo config('app.key') ? 'APP_KEY is set' : 'APP_KEY is missing'"
+
 # Create logs directory and set permissions
 echo "Setting up storage directories..."
 mkdir -p /var/www/html/storage/logs
