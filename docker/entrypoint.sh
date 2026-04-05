@@ -29,6 +29,10 @@ php artisan config:clear
 php artisan cache:clear
 php artisan view:clear
 
+# Regenerate config cache with new APP_KEY
+echo "Recaching configuration..."
+php artisan config:cache
+
 # Publish Sanctum migrations and run them
 echo "Publishing Sanctum migrations..."
 php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider" --force
