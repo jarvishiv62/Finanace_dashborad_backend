@@ -9,9 +9,8 @@ if [ ! -f .env ]; then
     echo "APP_DEBUG=false" >> .env
     echo "DB_CONNECTION=sqlite" >> .env
     echo "DB_DATABASE=/var/www/html/database/database.sqlite" >> .env
-    # Generate and set APP_KEY directly
-    APP_KEY=$(php artisan key:generate --show --no-interaction)
-    echo "APP_KEY=$APP_KEY" >> .env
+    # Set a predefined APP_KEY (static for production)
+    echo "APP_KEY=base64:$(openssl rand -base64 32)" >> .env
 fi
 
 # Verify .env file was created
