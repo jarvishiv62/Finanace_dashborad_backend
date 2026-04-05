@@ -10,8 +10,10 @@ if [ ! -f .env ]; then
     echo "DB_DATABASE=/var/www/html/database/database.sqlite" >> .env
 fi
 
-if ! grep -q "APP_KEY=" .env || grep -q "APP_KEY=$" .env; then
-    echo "==> Generating APP_KEY..."
+if ! grep -q "APP_KEY=" .env; then
+    echo "APP_KEY=" >> .env
+fi
+if grep -q "APP_KEY=$" .env; then
     php artisan key:generate --force
 fi
 
