@@ -68,18 +68,19 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         });
 
-        $exceptions->render(function (\Throwable $e, Request $request) {
-            if ($request->expectsJson() || $request->is('api/*')) {
-                // Log the real error for debugging, return generic message to client
-                \Illuminate\Support\Facades\Log::error('Unhandled exception', [
-                    'message' => $e->getMessage(),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
-                    'trace' => $e->getTraceAsString(),
-                ]);
-
-                return ApiResponse::error('An unexpected error occurred. Please try again later.', 500);
-            }
-        });
+        // Temporarily disabled catch-all to see real errors
+        // $exceptions->render(function (\Throwable $e, Request $request) {
+        //     if ($request->expectsJson() || $request->is('api/*')) {
+        //         // Log the real error for debugging, return generic message to client
+        //         \Illuminate\Support\Facades\Log::error('Unhandled exception', [
+        //             'message' => $e->getMessage(),
+        //             'file' => $e->getFile(),
+        //             'line' => $e->getLine(),
+        //             'trace' => $e->getTraceAsString(),
+        //         ]);
+    
+        //         return ApiResponse::error('An unexpected error occurred. Please try again later.', 500);
+        //     }
+        // });
     })
     ->create();

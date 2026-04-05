@@ -16,28 +16,28 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Admin User',
                 'email' => 'admin@finance.test',
-                'password' => Hash::make('passadmin'),
+                'password' => 'passadmin', // Let the model cast handle hashing
                 'role' => RoleEnum::Admin,
                 'status' => StatusEnum::Active,
             ],
             [
                 'name' => 'Analyst User',
                 'email' => 'analyst@finance.test',
-                'password' => Hash::make('passanalyst'),
+                'password' => 'passanalyst', // Let the model cast handle hashing
                 'role' => RoleEnum::Analyst,
                 'status' => StatusEnum::Active,
             ],
             [
                 'name' => 'Viewer User',
                 'email' => 'viewer@finance.test',
-                'password' => Hash::make('passviewer'),
+                'password' => 'passviewer', // Let the model cast handle hashing
                 'role' => RoleEnum::Viewer,
                 'status' => StatusEnum::Active,
             ],
             [
                 'name' => 'Inactive Analyst',
                 'email' => 'inactive@finance.test',
-                'password' => Hash::make('passinactive'),
+                'password' => 'passinactive', // Let the model cast handle hashing
                 'role' => RoleEnum::Analyst,
                 'status' => StatusEnum::Inactive,
             ],
