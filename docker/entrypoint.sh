@@ -32,6 +32,11 @@ php artisan config:clear
 php artisan cache:clear
 php artisan view:clear
 
+# Reload environment and verify APP_KEY
+echo "Reloading environment..."
+source .env
+echo "APP_KEY is now: $APP_KEY"
+
 # Regenerate config cache with new APP_KEY
 echo "Recaching configuration..."
 php artisan config:cache
