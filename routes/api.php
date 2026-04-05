@@ -29,6 +29,14 @@ Route::get('/health', function () {
     ]);
 });
 
+// ── Test Route (no auth) ─────────────────────────────────────────────────────
+Route::get('/test', function () {
+    return response()->json([
+        'message' => 'Test endpoint working!',
+        'timestamp' => now()->toISOString(),
+    ]);
+});
+
 // ── Debug Route (remove in production) ───────────────────────────────────────
 Route::get('/debug', function () {
     return response()->json([
