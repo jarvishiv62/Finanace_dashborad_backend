@@ -1,7 +1,13 @@
 #!/bin/sh
 
-# Wait for database to be ready (optional, for external databases)
-# sleep 10
+# Create logs directory and set permissions
+echo "Setting up storage directories..."
+mkdir -p /var/www/html/storage/logs
+chmod -R 777 /var/www/html/storage/logs
+
+# Publish Sanctum migrations and run them
+echo "Publishing Sanctum migrations..."
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider" --force
 
 # Run Laravel migrations
 echo "Running database migrations..."
