@@ -7,15 +7,6 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 
-// TEMPORARY — remove before submission
-Route::get('/logs', function () {
-    $path = storage_path('logs/laravel.log');
-    if (!file_exists($path))
-        return response()->json(['log' => 'No log file yet']);
-    $lines = array_slice(file($path), -50); // last 50 lines
-    return response(implode('', $lines))->header('Content-Type', 'text/plain');
-});
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
