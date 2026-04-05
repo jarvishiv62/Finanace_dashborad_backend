@@ -26,6 +26,20 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interactio
 # Copy rest of application
 COPY . .
 
+# Ensure .env file exists and has correct permissions
+RUN if [ ! -f .env ]; then \
+        echo "Creating .env from environment variables..."; \
+        echo "APP_NAME=Finance_backend" > .env; \
+        echo "APP_ENV=production" >> .env; \
+        echo "APP_URL=https://finanace-dashborad-backend.onrender.com" >> .env; \
+        echo "APP_DEBUG=false" >> .env; \
+        echo "DB_CONNECTION=sqlite" >> .env; \
+        echo "DB_DATABASE=/var/www/html/database/database.sqlite" >> .env; \
+    fi
+
+# Create SQLite database if it doesn't exist
+RUN mkdir -p database && touch database/database.sqlite
+
 # Copy nginx config
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 
@@ -44,11 +58,7 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Cache config and routes for production performance
-RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 EXPOSE 8000
 
