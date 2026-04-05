@@ -64,7 +64,7 @@ class DashboardService
 
         $rows = DB::table('financial_records')
             ->whereNull('deleted_at')
-            ->where('date', '>=', now()->subMonths($months)->startOfMonth()->toDateString())
+            ->where('date', '>=', date('Y-m-d', strtotime("-{$months} months")))
             ->selectRaw("
                 {$dateFormat} as month,
                 type,

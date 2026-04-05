@@ -6,7 +6,7 @@ if [ ! -f .env ]; then
     echo "APP_NAME=Finance_backend" > .env
     echo "APP_ENV=production" >> .env
     echo "APP_URL=https://finanace-dashborad-backend.onrender.com" >> .env
-    echo "APP_DEBUG=false" >> .env
+    echo "APP_DEBUG=true" >> .env
     echo "DB_CONNECTION=sqlite" >> .env
     echo "DB_DATABASE=/var/www/html/database/database.sqlite" >> .env
 fi
@@ -67,6 +67,9 @@ echo "Caching configuration..."
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
+
+# Add this line before "Starting supervisor..."
+tail -100 /var/www/html/storage/logs/laravel.log
 
 # Start supervisor
 echo "Starting supervisor..."
