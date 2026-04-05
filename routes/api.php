@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FinancialRecordController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,16 @@ use Illuminate\Support\Facades\Route;
 | controller methods. Middleware handles auth and role enforcement.
 |
 */
+
+// ── Health Check Route ─────────────────────────────────────────────────────
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now()->toISOString(),
+        'database' => DB::connection()->getPdo() ? 'connected' : 'disconnected',
+        'environment' => app()->environment()
+    ]);
+});
 
 // ── Public Auth Routes ─────────────────────────────────────────────────────
 Route::prefix('auth')->group(function () {

@@ -32,8 +32,14 @@ COPY docker/nginx.conf /etc/nginx/nginx.conf
 # Copy supervisor config
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Copy entrypoint script
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+
 # Create supervisor log directory
 RUN mkdir -p /var/log/supervisor
+
+# Make entrypoint script executable
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
@@ -46,4 +52,4 @@ RUN php artisan config:cache \
 
 EXPOSE 8000
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
