@@ -5,9 +5,13 @@ echo "Setting up storage directories..."
 mkdir -p /var/www/html/storage/logs
 chmod -R 777 /var/www/html/storage/logs
 
-# Generate APP_KEY if not set (force regenerate)
-echo "Checking APP_KEY..."
+# Force generate APP_KEY and ensure it's set
+echo "Generating APP_KEY..."
 php artisan key:generate --force
+
+# Set correct APP_URL for production
+echo "Setting APP_URL..."
+export APP_URL="https://finanace-dashborad-backend.onrender.com"
 
 # Clear caches to ensure fresh environment
 echo "Clearing caches..."
