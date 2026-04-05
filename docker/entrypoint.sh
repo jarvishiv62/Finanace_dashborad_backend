@@ -11,6 +11,10 @@ if [ ! -f .env ]; then
     echo "DB_DATABASE=/var/www/html/database/database.sqlite" >> .env
 fi
 
+# Verify .env file was created
+echo "Verifying .env file contents:"
+cat .env
+
 echo "Generating APP_KEY..."
 php artisan key:generate --force
 
