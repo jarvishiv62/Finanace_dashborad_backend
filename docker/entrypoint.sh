@@ -19,7 +19,9 @@ fi
 
 echo "==> Setting up storage..."
 mkdir -p /var/www/html/storage/logs
+mkdir -p /var/www/html/database
 chmod -R 777 /var/www/html/storage
+chmod -R 777 /var/www/html/database
 chmod -R 775 /var/www/html/bootstrap/cache
 
 echo "==> Clearing stale caches..."
