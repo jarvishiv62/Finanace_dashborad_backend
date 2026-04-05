@@ -10,7 +10,7 @@ if [ ! -f .env ]; then
     echo "DB_CONNECTION=sqlite" >> .env
     echo "DB_DATABASE=/var/www/html/database/database.sqlite" >> .env
     # Set a predefined APP_KEY (static for production)
-    echo "APP_KEY=base64:$(openssl rand -base64 32)" >> .env
+    echo "APP_KEY=base64:$(dd if=/dev/urandom bs=32 count=1 2>/dev/null | base64)" >> .env
 fi
 
 # Verify .env file was created
