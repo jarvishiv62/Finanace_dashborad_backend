@@ -21,8 +21,7 @@ services:
         generateValue: true
 
       - key: APP_URL
-        # Replace with your actual Render URL after first deploy
-        value: https://finance-backend.onrender.com
+        value: https://finanace-dashborad-backend.onrender.com
 
       - key: LOG_CHANNEL
         value: stderr

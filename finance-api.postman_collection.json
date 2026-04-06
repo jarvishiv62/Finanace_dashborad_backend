@@ -5,7 +5,10 @@
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "variable": [
-        { "key": "base_url", "value": "http://localhost:8000" },
+        {
+            "key": "base_url",
+            "value": "https://finanace-dashborad-backend.onrender.com"
+        },
         { "key": "admin_token", "value": "" },
         { "key": "analyst_token", "value": "" },
         { "key": "viewer_token", "value": "" }
